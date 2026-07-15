@@ -1,0 +1,26 @@
+.Wrapper {
+    width: 700px;
+    margin: auto;
+    & > form {
+
+        display: flex;
+        flex-direction: column;
+
+        
+        gap: 15px;
+        & > input {
+            border: 1px solid rgba(0, 0, 0, 0.33);
+            border-radius: 50px;
+            text-align: center;
+            &:focus {
+                outline: none;
+            }
+        }
+        & > button {
+            padding: 5px 15px;
+            border: 1px solid rgba(0, 0, 0, 0.33);
+            border-radius: 50px;
+            cursor: pointer;
+        }
+    }
+}

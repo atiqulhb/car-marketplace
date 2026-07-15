@@ -1,0 +1,18 @@
+.Wrapper {
+    width: 100%;
+    display: flex;
+    & > input {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        outline: none;
+    }
+
+    & > button {
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+}

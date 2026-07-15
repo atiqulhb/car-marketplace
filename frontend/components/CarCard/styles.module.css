@@ -1,0 +1,11 @@
+.CarCard {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+
+  height: 400px; /* Set a fixed height for the card */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

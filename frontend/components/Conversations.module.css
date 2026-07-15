@@ -1,0 +1,32 @@
+.ChatBox {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+
+.ConversationsBox {
+    width: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.MessageBoxWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.MessagesBox {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.SendBox {
+    height: 50px;
+    display: flex;
+    border: 1px solid black;
+}

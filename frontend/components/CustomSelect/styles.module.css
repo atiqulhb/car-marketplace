@@ -1,0 +1,47 @@
+.Wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    border: 1px solid rgba(0, 0, 0, 0.33);
+    border-radius: 50px;
+    & > span, input {
+        flex: 1;
+        text-align: center;
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.Icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 1px  solid rgba(0, 0, 0, 0.33);
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.DropDown {
+    top: 100%;
+    margin-top: 10px;
+    border-radius: 15px;
+    z-index: 99;
+    width: 100%;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.33);
+    text-align: center;
+    & > ul {
+            li {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.33);
+            &:last-child {
+                border: none;
+            }
+        }
+    }
+    & > button {
+        width: 100%;
+        border-top: 1px solid rgba(0, 0, 0, 0.33);
+    }
+}
