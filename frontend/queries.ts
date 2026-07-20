@@ -80,3 +80,25 @@ export const LOGIN_MUTATION =  `
           }
         }
       `
+
+
+export const SINGLE_CAR_QUERY = `
+  query Query($where: CarWhereUniqueInput!) {
+    car(where: $where) {
+      id
+      brand
+      model
+      year
+      price
+      images {
+        image {
+          url
+        }  
+      }
+      dealer {
+        id
+        name
+      }
+    }
+  }
+`

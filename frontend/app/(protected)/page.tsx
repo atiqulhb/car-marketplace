@@ -7,7 +7,6 @@ import CarsDisplay from "@/components/CarsDisplay";
 
 export default async function Home({ searchParams }) {
   const params = await searchParams;
-  console.log(params)
 
   const qc = getQueryClient()
 

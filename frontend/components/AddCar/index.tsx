@@ -12,7 +12,6 @@ export default function AddCar() {
     <div className={styles.Wrapper}>
       <form action={action}>
         <CustomSelect/>
-        <input type="text" name="brand"/>
         <input type="text" name="model"/>
         <input type="number" name="year"/>
         <input type="number" name="price"/>

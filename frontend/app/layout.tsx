@@ -28,11 +28,20 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      {/* <head>
+        {process.env.NODE_ENV !== 'production' && (
+          <>
+            <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+            <script dangerouslySetInnerHTML={{ __html: 'eruda.init();' }} />
+          </>
+        )}
+      </head> */}
       <body className="min-h-full flex flex-col">
          <Providers>
             {children}
          </Providers>
         </body>
+        
     </html>
   );
 }

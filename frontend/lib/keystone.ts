@@ -4,7 +4,7 @@ import { cache } from 'react'
 import { cookies } from 'next/headers'
 import { newBuildWhere } from '@/lib/newbuildWhere'
 import { buildOrderBy } from '@/lib/buildOrderBy'
-import { ADD_CAR_MUTATION, GET_CARS_QUERY, GET_CONVERSATIONS_QUERY, GET_MESSAGES_QUERY } from '@/queries'
+import { ADD_CAR_MUTATION, GET_CARS_QUERY, GET_CONVERSATIONS_QUERY, GET_MESSAGES_QUERY, SINGLE_CAR_QUERY } from '@/queries'
 import { env } from '@/config/env'
 
 export async function getSessionHeader() {
@@ -66,6 +66,8 @@ export const getAuthedUser = cache(async () => {
   }
 })
 
+
+
 export async function fetchCars(filters, cursor) {
   const where = newBuildWhere(filters)
   const orderBy = buildOrderBy(filters)
@@ -86,8 +88,6 @@ export async function fetchCars(filters, cursor) {
     }),
   });
 
-
-  
 
   const { data, errors } = await res.json();
 
@@ -173,12 +173,16 @@ export const getWishlist = cache(async () => {
   }
 })
 
-    return data.wishList.cars.map(({ id }) => id)
+    return data.wishList?.cars?.map(({ id }) => id)
   } catch (error) {
     console.error('Error fetching wishlist:', error)
     throw new Error('Failed to fetch wishlist')
   }
 })
+
+export async function getCarInformations(slug) {
+  return (await keystoneFetch(SINGLE_CAR_QUERY, { where: { slug } })).car
+}
 
 // export async function getSingleProduct(id) {
 //   const res = await fetch('http://localhost:3000/api/graphql', {

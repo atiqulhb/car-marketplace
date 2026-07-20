@@ -12,6 +12,7 @@
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",
     "dotenv": "^17.4.2",
+    "jose": "^6.2.3",
     "socket.io": "^4.8.3",
     "typescript": "^5.5.0"
   }

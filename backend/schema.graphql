@@ -6,6 +6,8 @@ type User {
   name: String
   email: String
   password: PasswordState
+  ownedCars(where: CarWhereInput! = {}, orderBy: [CarOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CarWhereUniqueInput): [Car!]
+  ownedCarsCount(where: CarWhereInput! = {}): Int
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
   conversations(where: ConversationWhereInput! = {}, orderBy: [ConversationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ConversationWhereUniqueInput): [Conversation!]
@@ -33,6 +35,7 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   email: StringFilter
+  ownedCars: CarManyRelationFilter
   posts: PostManyRelationFilter
   conversations: ConversationManyRelationFilter
   wishlist: WishListWhereInput
@@ -84,6 +87,12 @@ input NestedStringFilter {
   not: NestedStringFilter
 }
 
+input CarManyRelationFilter {
+  every: CarWhereInput
+  some: CarWhereInput
+  none: CarWhereInput
+}
+
 input PostManyRelationFilter {
   every: PostWhereInput
   some: PostWhereInput
@@ -123,10 +132,18 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  ownedCars: CarRelateToManyForUpdateInput
   posts: PostRelateToManyForUpdateInput
   conversations: ConversationRelateToManyForUpdateInput
   wishlist: WishListRelateToOneForUpdateInput
   createdAt: DateTime
+}
+
+input CarRelateToManyForUpdateInput {
+  disconnect: [CarWhereUniqueInput!]
+  set: [CarWhereUniqueInput!]
+  create: [CarCreateInput!]
+  connect: [CarWhereUniqueInput!]
 }
 
 input PostRelateToManyForUpdateInput {
@@ -158,10 +175,16 @@ input UserCreateInput {
   name: String
   email: String
   password: String
+  ownedCars: CarRelateToManyForCreateInput
   posts: PostRelateToManyForCreateInput
   conversations: ConversationRelateToManyForCreateInput
   wishlist: WishListRelateToOneForCreateInput
   createdAt: DateTime
+}
+
+input CarRelateToManyForCreateInput {
+  create: [CarCreateInput!]
+  connect: [CarWhereUniqueInput!]
 }
 
 input PostRelateToManyForCreateInput {
@@ -307,6 +330,7 @@ type Car {
   price: Decimal
   images(where: ImageWhereInput! = {}, orderBy: [ImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ImageWhereUniqueInput): [Image!]
   imagesCount(where: ImageWhereInput! = {}): Int
+  dealer: User
   slug: String
   createdAt: DateTime
 }
@@ -328,6 +352,7 @@ input CarWhereInput {
   year: IntNullableFilter
   price: DecimalNullableFilter
   images: ImageManyRelationFilter
+  dealer: UserWhereInput
   slug: StringFilter
   createdAt: DateTimeNullableFilter
 }
@@ -376,6 +401,7 @@ input CarUpdateInput {
   year: Int
   price: Decimal
   images: ImageRelateToManyForUpdateInput
+  dealer: UserRelateToOneForUpdateInput
   slug: String
   createdAt: DateTime
 }
@@ -398,6 +424,7 @@ input CarCreateInput {
   year: Int
   price: Decimal
   images: ImageRelateToManyForCreateInput
+  dealer: UserRelateToOneForCreateInput
   slug: String
   createdAt: DateTime
 }
@@ -767,12 +794,6 @@ input WishListWhereInput {
   cars: CarManyRelationFilter
 }
 
-input CarManyRelationFilter {
-  every: CarWhereInput
-  some: CarWhereInput
-  none: CarWhereInput
-}
-
 input WishListOrderByInput {
   id: OrderDirection
 }
@@ -780,13 +801,6 @@ input WishListOrderByInput {
 input WishListUpdateInput {
   user: UserRelateToOneForUpdateInput
   cars: CarRelateToManyForUpdateInput
-}
-
-input CarRelateToManyForUpdateInput {
-  disconnect: [CarWhereUniqueInput!]
-  set: [CarWhereUniqueInput!]
-  create: [CarCreateInput!]
-  connect: [CarWhereUniqueInput!]
 }
 
 input WishListUpdateArgs {
@@ -797,11 +811,6 @@ input WishListUpdateArgs {
 input WishListCreateInput {
   user: UserRelateToOneForCreateInput
   cars: CarRelateToManyForCreateInput
-}
-
-input CarRelateToManyForCreateInput {
-  create: [CarCreateInput!]
-  connect: [CarWhereUniqueInput!]
 }
 
 """
@@ -878,7 +887,6 @@ type Mutation {
   deleteWishLists(where: [WishListWhereUniqueInput!]!): [WishList]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
-  createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -890,12 +898,6 @@ type UserAuthenticationWithPasswordSuccess {
 
 type UserAuthenticationWithPasswordFailure {
   message: String!
-}
-
-input CreateInitialUserInput {
-  name: String
-  email: String
-  password: String
 }
 
 type Query {

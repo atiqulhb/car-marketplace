@@ -16,6 +16,7 @@ model User {
   name                String         @default("")
   email               String         @unique @default("")
   password            String
+  ownedCars           Car[]          @relation("Car_dealer")
   posts               Post[]         @relation("Post_author")
   conversations       Conversation[] @relation("Conversation_participants")
   wishlist            WishList?      @relation("User_wishlist", fields: [wishlistId], references: [id])
@@ -48,9 +49,13 @@ model Car {
   year               Int?
   price              Decimal?   @postgresql.Decimal(12, 3)
   images             Image[]    @relation("Car_images")
+  dealer             User?      @relation("Car_dealer", fields: [dealerId], references: [id])
+  dealerId           String?    @map("dealer")
   slug               String     @unique @default("")
   createdAt          DateTime?  @default(now())
   from_WishList_cars WishList[] @relation("WishList_cars")
+
+  @@index([dealerId])
 }
 
 model Image {

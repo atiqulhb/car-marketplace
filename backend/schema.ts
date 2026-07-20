@@ -56,6 +56,7 @@ export const lists = {
 
       // we can use this field to see what Posts this User has authored
       //   more on that in the Post list below
+      ownedCars: relationship({ ref: 'Car.dealer', many: true }),
       posts: relationship({ ref: 'Post.author', many: true }),
       conversations: relationship({ ref: 'Conversation.participants', many: true }),
       wishlist: relationship({ ref: 'WishList.user' }),
@@ -160,6 +161,7 @@ export const lists = {
       year: integer(),
       price: decimal({ precision: 12, scale: 3}),
       images: relationship({ ref: 'Image', many: true }),
+      dealer: relationship({ ref: 'User.ownedCars' }),
       slug: text({ isIndexed: 'unique' }),
       createdAt: timestamp({
         defaultValue: { kind: 'now' },

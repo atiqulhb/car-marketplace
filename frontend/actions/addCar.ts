@@ -1,7 +1,7 @@
 'use server'
 
 import sharp from 'sharp'
-import { addCarMutation, keystoneFetch, getSessionHeader } from "@/lib/keystone"
+import { addCarMutation, keystoneFetch, getSessionHeader, getAuthedUser } from "@/lib/keystone"
 import { ADD_CAR_MUTATION } from '@/queries'
 import { env } from '@/config/env'
 
@@ -11,13 +11,15 @@ async function processCarImage(buffer: Buffer) {
   }
 
 export async function addCar( prevState: any, formData: FormData) {
-  const brand = formData.get('brand') as string
+  const brandName = formData.get('brandName') as string
   const model = formData.get('model') as string
   const year = Number(formData.get('year'))
   const price = formData.get('price') as string
   const images = formData.getAll('images') as File[]
 
-  console.log('Form Data:', { brand, model, year, price, images })
+  console.log('Form Data:', { brandName, model, year, price, images })
+
+  const authedUser = await getAuthedUser()
 
   const processedBuffers = await Promise.all(images.map(async (img) => {
     const inputBuffer = Buffer.from(await img.arrayBuffer())
@@ -30,13 +32,18 @@ export async function addCar( prevState: any, formData: FormData) {
     query: ADD_CAR_MUTATION,
     variables: {
       data: {
-        brand,
+        brand: brandName,
         model,
         year,
         price,
         images: {
           create: imagesList
         },
+        dealer: {
+          connect: {
+            id: authedUser.id
+          }
+        }
       }
     }
   })

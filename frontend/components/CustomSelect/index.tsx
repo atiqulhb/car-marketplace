@@ -9,15 +9,22 @@ export default function Index() {
     const [addNew, setAddNew] = useState(false)
     const [newBrandName, setNewBrandName] = useState(null)
 
+    function handleBrandSelection(e) {
+        setSelectedBrandId(e.target.innerText)
+        setSearchInput('')
+        setDropDown(false)
+    }
+
   return (
     <div className={styles.Wrapper}>
+        <input type="text" name="brandId" value={selectedBrandId ?? ''} style={{ display: 'none' }} readOnly/>
         {dropDown ?
             <input type="text" autoFocus value={searchInput} onChange={e => setSearchInput(e.target.value)}/>
             :
          addNew ?
-            <input type='text' autoFocus/>
+            <input type='text' name="brandName" autoFocus value={newBrandName ?? ''} onChange={e => setNewBrandName(e.target.value)}/>
             :
-            <span>Select Brand</span>
+            <span>{selectedBrandId ? selectedBrandId : 'Select Brand'}</span>
         }
         
         <div className={styles.Icon}>
@@ -25,7 +32,11 @@ export default function Index() {
                 <ChevronUp  onClick={() => setDropDown(false)}/>
                 :
             addNew || selectedBrandId ? 
-                <X onClick={() =>{}}/>
+                <X onClick={() => {
+                    setSelectedBrandId(null)
+                    setNewBrandName(null)
+                    setAddNew(false)
+                }}/>
                 :
                 <ChevronDown onClick={() => setDropDown(true)}/>
             }
@@ -34,9 +45,9 @@ export default function Index() {
         {dropDown && (
             <div className={styles.DropDown}>
                 <ul>
-                    <li>1</li>
-                    <li>2</li>
-                    <li>3</li>
+                    <li onClick={handleBrandSelection}>Toyota</li>
+                    <li onClick={handleBrandSelection}>BMW</li>
+                    <li onClick={handleBrandSelection}>Marcedes</li>
                     <li>4</li>
                     <li>5</li>
                     <li>6</li>

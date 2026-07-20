@@ -38,6 +38,9 @@ export default withAuth(
         type: 'image',
         storagePath: 'public/images',
         generateUrl: path => `/images${path}`,
+        serverRoute: {
+          path: '/images',
+        },
       },
     },
   })

@@ -5,6 +5,7 @@ import { env } from '../config/env'
 let io: Server | null = null
 
 export function initializeSocket(httpServer: any, context: any) {
+    
     io = new Server(httpServer, {
         cors: {
             origin: [env.FRONTEND_URL],

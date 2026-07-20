@@ -1,0 +1,19 @@
+.Box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+}
+
+.Messages {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    & > span {
+        border: 1px solid rgba(0, 0, 0, 0.33);
+        border-radius: 5px;
+        padding: 5px 10px;
+    }
+}

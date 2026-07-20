@@ -6,6 +6,25 @@
 
   height: 400px; /* Set a fixed height for the card */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.Image {
+  flex: 1;
+  & > img {
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.WishList {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.Info {
+  padding: 10 20px;
+  flex-direction: column;
 }
