@@ -1,5 +1,101 @@
 .Filters {
-    display: flex;
+    /* display: flex;
     justify-content: space-around;
-    padding: 15px 0px;
+    padding: 15px 0px; */
+}
+
+.Search {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.SearchBar {
+    width: 800px;
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(0,0,0,0.33);
+    border-radius: 50px;
+    padding: 5px;
+    & > input {
+        flex: 1;
+        outline: none;
+    }
+}
+
+.FilterSelection {
+    display: flex;
+    padding: 15px 0;
+}
+
+.SingleFilter {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Brand2 {
+    width: auto;
+    position: relative;
+    display: flex;
+    border: 1px solid rgba(0,0,0,0.33);
+    border-radius: 50px;
+    & > input, span {
+        padding: 5px 15px;
+        text-align: center;
+        outline: none;
+    }
+}
+
+.IconWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 1px solid rgba(0,0,0,0.33);
+    border-radius: 50px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.DropDown {
+    top: 100%;
+    margin-top: 10px;
+    border-radius: 15px;
+    z-index: 99;
+    width: 100%;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.33);
+    text-align: center;
+    & > ul {
+            & > li {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.33);
+            cursor: pointer;
+            &:last-child {
+                border: none;
+            }
+        }
+    }
+}
+
+.SelectedFilters {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0;
+    gap: 17px;
+}
+
+.SelectedFilter {
+    display: flex;
+    border: 1px solid rgba(0, 0, 0, 0.33);
+    border-radius: 50px;
+    align-items: center;
+    & > span {
+        padding: 0 15px;
+    }
 }

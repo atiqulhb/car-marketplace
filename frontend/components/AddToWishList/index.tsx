@@ -4,7 +4,7 @@ import { Heart } from 'lucide-react'
 
 export default function AddToWishList() {
     return (
-        <div>
+        <div onClick={() => console.log('clicked')}>
             <Heart/>
         </div>
     )

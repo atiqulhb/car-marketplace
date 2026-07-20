@@ -10,7 +10,6 @@ import styles from './styles.module.css'
 export default function CarCard({ info }) {
     const { id, brand, model, year, price, images, slug } = info
 
-    console.log(images)
 
     const { toggle } = useToggleWishListing()
     const { wishlist } = useWishlist()
