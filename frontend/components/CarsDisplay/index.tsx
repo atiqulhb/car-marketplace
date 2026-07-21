@@ -19,9 +19,6 @@ export default function CarsDisplay({ filters }) {
 
     const cars = data?.pages.flatMap(page => page.items) ?? []
 
-    //console.log(data, 'data from cars display')
-    //console.log(cars, 'cars from cars display')
-
     const sentinelRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {

@@ -32,8 +32,11 @@ export default async function login(prevState: any, formData: FormData) {
         path: '/',
       })
 
-      redirect('/')
+      // redirect('/')
+
+      return { success: true, error: null }
    }
+
 
     return { success: false, error: message ?? 'Login Failed' }
 

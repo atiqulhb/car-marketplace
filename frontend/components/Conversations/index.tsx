@@ -10,7 +10,6 @@ export default function Conversations() {
      const [selectedConversationId, setSelectedConversationId] = useState(null)
 
     const conversations = useConversations()
-    console.log('conversations of the user', conversations)
 
     return(
         <div className={styles.ChatBox}>

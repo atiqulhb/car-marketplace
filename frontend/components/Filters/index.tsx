@@ -33,8 +33,6 @@ export default function Filters() {
           startTransition
      })
 
-     console.log(params.brand)
-
      function toggleBrand (slug: string) {
           console.log(slug)
           if (slug === "all") {
@@ -121,7 +119,7 @@ export default function Filters() {
          <div className={styles.Search}>
             <div className={styles.SearchBar}>
                <input type="text" name="" id="" />
-               <Search size={12} strokeWidth={1} />
+               <Search size={15} strokeWidth={1} />
             </div>
          </div>
           <div className={styles.FilterSelection}>
@@ -130,13 +128,13 @@ export default function Filters() {
                          {brandDropDown ? (
                               <input type="text" name="brandSearch" id="" autoFocus/>
                          ) : (
-                              <span>{params.brand.length > 0 ? "Add more Brand" : "Add Brand"}</span>
+                              <span>{params.brand.length > 0 ? "Add More Brand" : "Add Brand"}</span>
                          )}
                          <div className={styles.IconWrapper}>
                               {brandDropDown ? (
-                                   <ChevronUp onClick={() => setBrandDropDown(false)}/>
+                                   <ChevronUp size={20} strokeWidth={1} onClick={() => setBrandDropDown(false)}/>
                               ) : (
-                                   <ChevronDown onClick={() => setBrandDropDown(true)}/>
+                                   <ChevronDown size={13} strokeWidth={1} onClick={() => setBrandDropDown(true)}/>
                               )}
                          </div>
                          {brandDropDown && (
@@ -157,7 +155,7 @@ export default function Filters() {
                     <div key={b} className={styles.SelectedFilter}>
                          <span>{b}</span>
                          <div className={styles.IconWrapper} onClick={() => toggleParam("brand", b)}>
-                              <X size={15} strokeWidth={1}/>
+                              <X size={20} strokeWidth={1}/>
                          </div>
                     </div>
                ))}

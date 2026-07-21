@@ -2,6 +2,8 @@
     /* display: flex;
     justify-content: space-around;
     padding: 15px 0px; */
+    margin-bottom: 1px solid rgba(0,0,0,0.33);
+    margin-bottom: 50px;
 }
 
 .Search {
@@ -13,15 +15,17 @@
 }
 
 .SearchBar {
-    width: 800px;
+    width: 60vw;
+    max-width: 800px;
     display: flex;
     align-items: center;
     border: 1px solid rgba(0,0,0,0.33);
     border-radius: 50px;
-    padding: 5px;
+    padding: 0 11px;
     & > input {
         flex: 1;
         outline: none;
+        text-align: center;
     }
 }
 
@@ -38,25 +42,29 @@
 }
 
 .Brand2 {
+    height: auto;
     width: auto;
     position: relative;
     display: flex;
+    align-items: center;
     border: 1px solid rgba(0,0,0,0.33);
     border-radius: 50px;
     & > input, span {
-        padding: 5px 15px;
+        padding: 0 10px 0 15px;
         text-align: center;
         outline: none;
     }
 }
 
 .IconWrapper {
+    width: 25px;
+    height: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-left: 1px solid rgba(0,0,0,0.33);
     border-radius: 50px;
-    padding: 5px;
+    padding: 2px;
     cursor: pointer;
 }
 
@@ -83,10 +91,10 @@
 
 .SelectedFilters {
     width: 100%;
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 15px 0;
     gap: 17px;
 }
 

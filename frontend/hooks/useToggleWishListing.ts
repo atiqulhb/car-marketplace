@@ -5,40 +5,40 @@ import { useAuth } from "./useAuth";
 
 export function useToggleWishListing() {
     const qc = useQueryClient()
-    const { user } = useAuth()
 
-    const { mutate: toggle } = useMutation({
+    const { mutate: toggle, mutateAsync: toggleAsync } = useMutation({
         mutationFn: toggleWishListing,
         onMutate: async (carId: string) => {
-            await qc.cancelQueries({
-                queryKey: queryKeys.wishlist(user.id)
+        const authUser = qc.getQueryData(queryKeys.authedUser)
+
+            if (!authUser) return
+            
+            console.log('authedUser in onMutate', authUser)
+
+            const wishListKey = queryKeys.wishlist(authUser.id)
+
+            await qc.cancelQueries({ queryKey: wishListKey })
+
+            const previous = qc.getQueryData(wishListKey)
+
+            qc.setQueryData(wishListKey, (old) => {
+                if (!old) return [carId]
+                
+                if (old.includes(carId))
+                    return old.filter(id => id !== carId)
+
+                return [...old, carId]
             })
 
-            const previous = qc.getQueryData(queryKeys.wishlist(user.id))
-
-            qc.setQueryData(queryKeys.wishlist(user.id),
-                (old) => {
-                    if (!old) return [carId]
-                    
-                    if (old.includes(carId))
-                        return old.filter(id => id !== carId)
-
-                    return [...old, carId]
-                }
-            )
-
-            return { previous }
+            return { previous, wishListKey }
         },
 
         onError: (_, __, context) => {
-            if (context?.previous) {
-                qc.setQueryData(
-                    queryKeys.wishlist(user.id),
-                    context.previous
-                )
+            if (context?.previous && context?.wishListKey) {
+                qc.setQueryData(context.wishListKey, context.previous)
             }
         }
     })
 
-    return { toggle }
+    return { toggle, toggleAsync }
 }
