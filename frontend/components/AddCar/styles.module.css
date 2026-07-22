@@ -1,11 +1,13 @@
 .Wrapper {
     width: 100%;
     margin: auto;
+    display: flex;
+    justify-content: center;
     & > form {
-
+        width: 350px;
         display: flex;
         flex-direction: column;
-
+        align-items: center;
         
         gap: 15px;
         & > input {

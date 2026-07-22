@@ -6,10 +6,9 @@ type User {
   name: String
   email: String
   password: PasswordState
+  role: UserRoleType
   ownedCars(where: CarWhereInput! = {}, orderBy: [CarOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CarWhereUniqueInput): [Car!]
   ownedCarsCount(where: CarWhereInput! = {}): Int
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
   conversations(where: ConversationWhereInput! = {}, orderBy: [ConversationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ConversationWhereUniqueInput): [Conversation!]
   conversationsCount(where: ConversationWhereInput! = {}): Int
   wishlist: WishList
@@ -18,6 +17,11 @@ type User {
 
 type PasswordState {
   isSet: Boolean!
+}
+
+enum UserRoleType {
+  USER
+  ADMIN
 }
 
 scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
@@ -35,8 +39,8 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   email: StringFilter
+  role: UserRoleTypeNullableFilter
   ownedCars: CarManyRelationFilter
-  posts: PostManyRelationFilter
   conversations: ConversationManyRelationFilter
   wishlist: WishListWhereInput
   createdAt: DateTimeNullableFilter
@@ -87,16 +91,17 @@ input NestedStringFilter {
   not: NestedStringFilter
 }
 
+input UserRoleTypeNullableFilter {
+  equals: UserRoleType
+  in: [UserRoleType!]
+  notIn: [UserRoleType!]
+  not: UserRoleTypeNullableFilter
+}
+
 input CarManyRelationFilter {
   every: CarWhereInput
   some: CarWhereInput
   none: CarWhereInput
-}
-
-input PostManyRelationFilter {
-  every: PostWhereInput
-  some: PostWhereInput
-  none: PostWhereInput
 }
 
 input ConversationManyRelationFilter {
@@ -120,6 +125,7 @@ input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
   email: OrderDirection
+  role: OrderDirection
   createdAt: OrderDirection
 }
 
@@ -132,8 +138,8 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  role: UserRoleType
   ownedCars: CarRelateToManyForUpdateInput
-  posts: PostRelateToManyForUpdateInput
   conversations: ConversationRelateToManyForUpdateInput
   wishlist: WishListRelateToOneForUpdateInput
   createdAt: DateTime
@@ -144,13 +150,6 @@ input CarRelateToManyForUpdateInput {
   set: [CarWhereUniqueInput!]
   create: [CarCreateInput!]
   connect: [CarWhereUniqueInput!]
-}
-
-input PostRelateToManyForUpdateInput {
-  disconnect: [PostWhereUniqueInput!]
-  set: [PostWhereUniqueInput!]
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
 }
 
 input ConversationRelateToManyForUpdateInput {
@@ -175,8 +174,8 @@ input UserCreateInput {
   name: String
   email: String
   password: String
+  role: UserRoleType
   ownedCars: CarRelateToManyForCreateInput
-  posts: PostRelateToManyForCreateInput
   conversations: ConversationRelateToManyForCreateInput
   wishlist: WishListRelateToOneForCreateInput
   createdAt: DateTime
@@ -185,11 +184,6 @@ input UserCreateInput {
 input CarRelateToManyForCreateInput {
   create: [CarCreateInput!]
   connect: [CarWhereUniqueInput!]
-}
-
-input PostRelateToManyForCreateInput {
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
 }
 
 input ConversationRelateToManyForCreateInput {
@@ -202,131 +196,12 @@ input WishListRelateToOneForCreateInput {
   connect: WishListWhereUniqueInput
 }
 
-type Post {
-  id: ID!
-  title: String
-  content: Post_content_Document
-  author: User
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tagsCount(where: TagWhereInput! = {}): Int
-}
-
-type Post_content_Document {
-  document(hydrateRelationships: Boolean! = false): JSON!
-}
-
-input PostWhereUniqueInput {
-  id: ID
-}
-
-input PostWhereInput {
-  AND: [PostWhereInput!]
-  OR: [PostWhereInput!]
-  NOT: [PostWhereInput!]
-  id: IDFilter
-  title: StringFilter
-  author: UserWhereInput
-  tags: TagManyRelationFilter
-}
-
-input TagManyRelationFilter {
-  every: TagWhereInput
-  some: TagWhereInput
-  none: TagWhereInput
-}
-
-input PostOrderByInput {
-  id: OrderDirection
-  title: OrderDirection
-}
-
-input PostUpdateInput {
-  title: String
-  content: JSON
-  author: UserRelateToOneForUpdateInput
-  tags: TagRelateToManyForUpdateInput
-}
-
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
-input TagRelateToManyForUpdateInput {
-  disconnect: [TagWhereUniqueInput!]
-  set: [TagWhereUniqueInput!]
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
-input PostUpdateArgs {
-  where: PostWhereUniqueInput!
-  data: PostUpdateInput!
-}
-
-input PostCreateInput {
-  title: String
-  content: JSON
-  author: UserRelateToOneForCreateInput
-  tags: TagRelateToManyForCreateInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-}
-
-input TagRelateToManyForCreateInput {
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
-type Tag {
-  id: ID!
-  name: String
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
-}
-
-input TagWhereUniqueInput {
-  id: ID
-}
-
-input TagWhereInput {
-  AND: [TagWhereInput!]
-  OR: [TagWhereInput!]
-  NOT: [TagWhereInput!]
-  id: IDFilter
-  name: StringFilter
-  posts: PostManyRelationFilter
-}
-
-input TagOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-}
-
-input TagUpdateInput {
-  name: String
-  posts: PostRelateToManyForUpdateInput
-}
-
-input TagUpdateArgs {
-  where: TagWhereUniqueInput!
-  data: TagUpdateInput!
-}
-
-input TagCreateInput {
-  name: String
-  posts: PostRelateToManyForCreateInput
-}
-
 type Car {
   id: ID!
-  brand: String
-  model: String
+  brand: Brand
+  model: Model
   year: Int
+  fuelType: FuelType
   price: Decimal
   images(where: ImageWhereInput! = {}, orderBy: [ImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ImageWhereUniqueInput): [Image!]
   imagesCount(where: ImageWhereInput! = {}): Int
@@ -347,9 +222,10 @@ input CarWhereInput {
   OR: [CarWhereInput!]
   NOT: [CarWhereInput!]
   id: IDFilter
-  brand: StringFilter
-  model: StringFilter
+  brand: BrandWhereInput
+  model: ModelWhereInput
   year: IntNullableFilter
+  fuelType: FuelTypeWhereInput
   price: DecimalNullableFilter
   images: ImageManyRelationFilter
   dealer: UserWhereInput
@@ -387,8 +263,6 @@ input ImageManyRelationFilter {
 
 input CarOrderByInput {
   id: OrderDirection
-  brand: OrderDirection
-  model: OrderDirection
   year: OrderDirection
   price: OrderDirection
   slug: OrderDirection
@@ -396,14 +270,33 @@ input CarOrderByInput {
 }
 
 input CarUpdateInput {
-  brand: String
-  model: String
+  brand: BrandRelateToOneForUpdateInput
+  model: ModelRelateToOneForUpdateInput
   year: Int
+  fuelType: FuelTypeRelateToOneForUpdateInput
   price: Decimal
   images: ImageRelateToManyForUpdateInput
   dealer: UserRelateToOneForUpdateInput
   slug: String
   createdAt: DateTime
+}
+
+input BrandRelateToOneForUpdateInput {
+  create: BrandCreateInput
+  connect: BrandWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ModelRelateToOneForUpdateInput {
+  create: ModelCreateInput
+  connect: ModelWhereUniqueInput
+  disconnect: Boolean
+}
+
+input FuelTypeRelateToOneForUpdateInput {
+  create: FuelTypeCreateInput
+  connect: FuelTypeWhereUniqueInput
+  disconnect: Boolean
 }
 
 input ImageRelateToManyForUpdateInput {
@@ -413,15 +306,22 @@ input ImageRelateToManyForUpdateInput {
   connect: [ImageWhereUniqueInput!]
 }
 
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
 input CarUpdateArgs {
   where: CarWhereUniqueInput!
   data: CarUpdateInput!
 }
 
 input CarCreateInput {
-  brand: String
-  model: String
+  brand: BrandRelateToOneForCreateInput
+  model: ModelRelateToOneForCreateInput
   year: Int
+  fuelType: FuelTypeRelateToOneForCreateInput
   price: Decimal
   images: ImageRelateToManyForCreateInput
   dealer: UserRelateToOneForCreateInput
@@ -429,9 +329,29 @@ input CarCreateInput {
   createdAt: DateTime
 }
 
+input BrandRelateToOneForCreateInput {
+  create: BrandCreateInput
+  connect: BrandWhereUniqueInput
+}
+
+input ModelRelateToOneForCreateInput {
+  create: ModelCreateInput
+  connect: ModelWhereUniqueInput
+}
+
+input FuelTypeRelateToOneForCreateInput {
+  create: FuelTypeCreateInput
+  connect: FuelTypeWhereUniqueInput
+}
+
 input ImageRelateToManyForCreateInput {
   create: [ImageCreateInput!]
   connect: [ImageWhereUniqueInput!]
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 type Image {
@@ -495,6 +415,8 @@ type Brand {
   name: String
   models(where: ModelWhereInput! = {}, orderBy: [ModelOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ModelWhereUniqueInput): [Model!]
   modelsCount(where: ModelWhereInput! = {}): Int
+  cars(where: CarWhereInput! = {}, orderBy: [CarOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CarWhereUniqueInput): [Car!]
+  carsCount(where: CarWhereInput! = {}): Int
 }
 
 input BrandWhereUniqueInput {
@@ -508,6 +430,7 @@ input BrandWhereInput {
   id: IDFilter
   name: StringFilter
   models: ModelManyRelationFilter
+  cars: CarManyRelationFilter
 }
 
 input ModelManyRelationFilter {
@@ -524,6 +447,7 @@ input BrandOrderByInput {
 input BrandUpdateInput {
   name: String
   models: ModelRelateToManyForUpdateInput
+  cars: CarRelateToManyForUpdateInput
 }
 
 input ModelRelateToManyForUpdateInput {
@@ -541,6 +465,7 @@ input BrandUpdateArgs {
 input BrandCreateInput {
   name: String
   models: ModelRelateToManyForCreateInput
+  cars: CarRelateToManyForCreateInput
 }
 
 input ModelRelateToManyForCreateInput {
@@ -552,6 +477,8 @@ type Model {
   id: ID!
   name: String
   brand: Brand
+  cars(where: CarWhereInput! = {}, orderBy: [CarOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CarWhereUniqueInput): [Car!]
+  carsCount(where: CarWhereInput! = {}): Int
 }
 
 input ModelWhereUniqueInput {
@@ -565,6 +492,7 @@ input ModelWhereInput {
   id: IDFilter
   name: StringFilter
   brand: BrandWhereInput
+  cars: CarManyRelationFilter
 }
 
 input ModelOrderByInput {
@@ -575,12 +503,7 @@ input ModelOrderByInput {
 input ModelUpdateInput {
   name: String
   brand: BrandRelateToOneForUpdateInput
-}
-
-input BrandRelateToOneForUpdateInput {
-  create: BrandCreateInput
-  connect: BrandWhereUniqueInput
-  disconnect: Boolean
+  cars: CarRelateToManyForUpdateInput
 }
 
 input ModelUpdateArgs {
@@ -591,16 +514,14 @@ input ModelUpdateArgs {
 input ModelCreateInput {
   name: String
   brand: BrandRelateToOneForCreateInput
-}
-
-input BrandRelateToOneForCreateInput {
-  create: BrandCreateInput
-  connect: BrandWhereUniqueInput
+  cars: CarRelateToManyForCreateInput
 }
 
 type FuelType {
   id: ID!
   name: String
+  cars(where: CarWhereInput! = {}, orderBy: [CarOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CarWhereUniqueInput): [Car!]
+  carsCount(where: CarWhereInput! = {}): Int
 }
 
 input FuelTypeWhereUniqueInput {
@@ -613,6 +534,7 @@ input FuelTypeWhereInput {
   NOT: [FuelTypeWhereInput!]
   id: IDFilter
   name: StringFilter
+  cars: CarManyRelationFilter
 }
 
 input FuelTypeOrderByInput {
@@ -622,6 +544,7 @@ input FuelTypeOrderByInput {
 
 input FuelTypeUpdateInput {
   name: String
+  cars: CarRelateToManyForUpdateInput
 }
 
 input FuelTypeUpdateArgs {
@@ -631,6 +554,7 @@ input FuelTypeUpdateArgs {
 
 input FuelTypeCreateInput {
   name: String
+  cars: CarRelateToManyForCreateInput
 }
 
 type Conversation {
@@ -825,18 +749,6 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
-  createPost(data: PostCreateInput!): Post
-  createPosts(data: [PostCreateInput!]!): [Post]
-  updatePost(where: PostWhereUniqueInput!, data: PostUpdateInput!): Post
-  updatePosts(data: [PostUpdateArgs!]!): [Post]
-  deletePost(where: PostWhereUniqueInput!): Post
-  deletePosts(where: [PostWhereUniqueInput!]!): [Post]
-  createTag(data: TagCreateInput!): Tag
-  createTags(data: [TagCreateInput!]!): [Tag]
-  updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
-  updateTags(data: [TagUpdateArgs!]!): [Tag]
-  deleteTag(where: TagWhereUniqueInput!): Tag
-  deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
   createCar(data: CarCreateInput!): Car
   createCars(data: [CarCreateInput!]!): [Car]
   updateCar(where: CarWhereUniqueInput!, data: CarUpdateInput!): Car
@@ -904,12 +816,6 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int
-  post(where: PostWhereUniqueInput!): Post
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
-  tag(where: TagWhereUniqueInput!): Tag
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tagsCount(where: TagWhereInput! = {}): Int
   car(where: CarWhereUniqueInput!): Car
   cars(where: CarWhereInput! = {}, orderBy: [CarOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CarWhereUniqueInput): [Car!]
   carsCount(where: CarWhereInput! = {}): Int

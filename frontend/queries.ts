@@ -10,9 +10,16 @@ export const GET_CARS_QUERY = `
   query Cars($where: CarWhereInput!, $orderBy: [CarOrderByInput!]!, $take: Int, $skip: Int!, $cursor: CarWhereUniqueInput) {
     cars(where: $where, orderBy: $orderBy, take: $take, skip: $skip, cursor: $cursor) {
       id
-      brand
-      model
+      brand {
+        name
+      }
+      model {
+        name
+      }
       year
+      fuelType {
+        name
+      }
       price
       images {
         image {
@@ -86,9 +93,16 @@ export const SINGLE_CAR_QUERY = `
   query Query($where: CarWhereUniqueInput!) {
     car(where: $where) {
       id
-      brand
-      model
+      brand {
+        name
+      }
+      model {
+        name
+      }
       year
+      fuelType {
+        name
+      }
       price
       images {
         image {

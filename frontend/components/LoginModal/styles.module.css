@@ -1,0 +1,32 @@
+.Close {
+    /* width: 21px; */
+    /* height: 21px; */
+    border: 1px solid rgba(0, 0, 0, 0.33);
+    border-radius: 50%;
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* padding: 7px; */
+    float: right;
+    cursor: pointer;
+}
+
+.Form {
+    margin: 30px 15px 15px;
+    display: flex;
+    flex-direction: column;
+    & > input {
+        border: 1px solid rgba(0, 0, 0, 0.33);
+        padding: 5px 15px;
+        border-radius: 50px;
+        margin-bottom: 15px;
+        outline: none;
+    }
+
+    & > button {
+        border: 1px solid rgba(0, 0, 0, 0.33);
+        align-self: center;
+        padding: 5px 15px;
+        border-radius: 50px;
+    }
+}

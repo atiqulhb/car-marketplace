@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { useActionState, useState, useTransition } from "react"
 import { Dialog } from "@/components/Dialog"
 import login from "@/actions/login"
+import { X } from 'lucide-react'
 import styles from './styles.module.css'
 
 export function LoginModal() {
@@ -27,7 +28,7 @@ export function LoginModal() {
         close()
 
         await pendingAction?.()
-         router.refresh()
+        router.refresh()
     }
 
     function onSubmit(formData: FormData) {
@@ -47,9 +48,12 @@ export function LoginModal() {
 
     return (
         <Dialog>
+            <X className={styles.Close} size={20} strokeWidth={1} onClick={() => close()}/>
             <form className={styles.Form} action={onSubmit}>
-                <input type="email" name="email"/>
-                <input type="password" name="password"/>
+                <label htmlFor="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="Enter email address"/>
+                <label htmlFor="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password"/>
                 {error && <p>{error}</p>}
                 <button type="submit" disabled={isPending}>
                     {isPending ? 'Signing in...' : 'Sign in'}
