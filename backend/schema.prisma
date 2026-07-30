@@ -38,7 +38,6 @@ model Car {
   images             Image[]    @relation("Car_images")
   dealer             User?      @relation("Car_dealer", fields: [dealerId], references: [id])
   dealerId           String?    @map("dealer")
-  slug               String     @unique @default("")
   createdAt          DateTime?  @default(now())
   from_WishList_cars WishList[] @relation("WishList_cars")
 

@@ -3,5 +3,7 @@ export const queryKeys = {
   cars: (filters) => ["cars", filters] as const,
   conversations: (userId: string) => ["conversations", userId] as const,
   messages: (conversationId: string) => ["messages", conversationId] as const,
-  wishlist: (userId: string) => ["wl-cars-ids", userId]
+  wishlist: (userId: string) => ["wl-cars-ids", userId],
+  brands: ["brands"] as const,
+  models: (brandId: string) => ["models", brandId] as const
 }

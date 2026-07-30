@@ -26,7 +26,6 @@ export const GET_CARS_QUERY = `
           url
         }
       }
-      slug
     }
   }
 `
@@ -113,6 +112,45 @@ export const SINGLE_CAR_QUERY = `
         id
         name
       }
+    }
+  }
+`
+
+export const GET_ALL_BRANDS = `
+  query Query {
+    brands {
+      id
+      name
+    }
+  }
+`
+
+export const GET_MODELS = `
+  query Models($where: ModelWhereInput!, $orderBy: [ModelOrderByInput!]!) {
+    models(where: $where, orderBy: $orderBy) {
+      id
+      name
+    }
+  }
+`
+
+export const ADD_BRAND_WITH_MODEL = `
+  mutation Mutation($data: BrandCreateInput!) {
+    createBrand(data: $data) {
+      id
+      name
+      models {
+        id
+        name
+      }
+    }
+  }
+`
+
+export const ADD_MODEL_TO_BRAND = `
+  mutation CreateModel($data: ModelCreateInput!) {
+    createModel(data: $data) {
+      id
     }
   }
 `

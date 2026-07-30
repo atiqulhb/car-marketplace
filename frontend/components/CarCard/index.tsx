@@ -9,6 +9,7 @@ import styles from './styles.module.css'
 import { useRequireAuth } from "@/hooks/useRequireAuth"
 
 export default function CarCard({ info }) {
+    console.log(info)
     const { id, brand, model, year, price, images, slug } = info
 
     const requireAuth = useRequireAuth()
@@ -29,7 +30,7 @@ export default function CarCard({ info }) {
                     </div>
                 
                     <div className={styles.Info}>
-                        <h3>{brand} {model} {year}</h3>
+                        <h3>{brand?.name} {model?.name} {year}</h3>
                         <p>{Number(price).toLocaleString("en-US", {style:"currency", currency:"USD", minimumFractionDigits: 0, maximumFractionDigits: 2})}</p>
                     </div>
                 </Link>

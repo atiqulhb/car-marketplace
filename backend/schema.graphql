@@ -206,7 +206,6 @@ type Car {
   images(where: ImageWhereInput! = {}, orderBy: [ImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ImageWhereUniqueInput): [Image!]
   imagesCount(where: ImageWhereInput! = {}): Int
   dealer: User
-  slug: String
   createdAt: DateTime
 }
 
@@ -214,7 +213,6 @@ scalar Decimal
 
 input CarWhereUniqueInput {
   id: ID
-  slug: String
 }
 
 input CarWhereInput {
@@ -229,7 +227,6 @@ input CarWhereInput {
   price: DecimalNullableFilter
   images: ImageManyRelationFilter
   dealer: UserWhereInput
-  slug: StringFilter
   createdAt: DateTimeNullableFilter
 }
 
@@ -265,7 +262,6 @@ input CarOrderByInput {
   id: OrderDirection
   year: OrderDirection
   price: OrderDirection
-  slug: OrderDirection
   createdAt: OrderDirection
 }
 
@@ -277,7 +273,6 @@ input CarUpdateInput {
   price: Decimal
   images: ImageRelateToManyForUpdateInput
   dealer: UserRelateToOneForUpdateInput
-  slug: String
   createdAt: DateTime
 }
 
@@ -325,7 +320,6 @@ input CarCreateInput {
   price: Decimal
   images: ImageRelateToManyForCreateInput
   dealer: UserRelateToOneForCreateInput
-  slug: String
   createdAt: DateTime
 }
 

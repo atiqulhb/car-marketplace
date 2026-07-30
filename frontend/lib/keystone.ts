@@ -4,7 +4,7 @@ import { cache } from 'react'
 import { cookies } from 'next/headers'
 import { newBuildWhere } from '@/lib/newbuildWhere'
 import { buildOrderBy } from '@/lib/buildOrderBy'
-import { ADD_CAR_MUTATION, GET_CARS_QUERY, GET_CONVERSATIONS_QUERY, GET_MESSAGES_QUERY, SINGLE_CAR_QUERY } from '@/queries'
+import { ADD_CAR_MUTATION, GET_CARS_QUERY, GET_CONVERSATIONS_QUERY, GET_MESSAGES_QUERY, SINGLE_CAR_QUERY, GET_ALL_BRANDS, GET_MODELS, ADD_BRAND_WITH_MODEL, ADD_MODEL_TO_BRAND } from '@/queries'
 import { env } from '@/config/env'
 
 export async function getSessionHeader() {
@@ -14,7 +14,6 @@ export async function getSessionHeader() {
 
 export async function keystoneFetch(query: string, variables?: Record<string, unknown>) {
   const sessionHeader = await getSessionHeader()
-
   
   const res = await fetch(env.BACKEND_URL!, {
     method: "POST",
@@ -182,6 +181,73 @@ export const getWishlist = cache(async () => {
 
 export async function getCarInformations(slug) {
   return (await keystoneFetch(SINGLE_CAR_QUERY, { where: { slug } })).car
+}
+
+export async function getAllBrands(cursor) {
+  const take = 10
+  const data = await keystoneFetch(GET_ALL_BRANDS,{
+    "orderBy": [{ "name": 'asc' }, { id: 'asc' }],
+    "skip": cursor ? 1 : 0,
+    take,
+    "cursor": { "id": cursor }
+  })
+
+  const brands = data?.brands
+
+  const hasMore = brands.length > take
+  const items = hasMore ? brands.slice(0, take): brands
+
+  return { items, nextCursor: hasMore ? items[items.length -1].id : null }
+}
+
+export async function getModels(brandId: string) {
+  const data = await keystoneFetch(GET_MODELS, {
+    "where": {
+      "brand": {
+        "id": {
+          "in": [brandId]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "name": 'asc'
+      }
+    ]
+  })
+  return data.models
+}
+
+export async function addBrandwithModel(brandName, modelName) {
+  const data = await keystoneFetch(ADD_BRAND_WITH_MODEL, {
+    "data": {
+      "name": brandName,
+      "models": {
+        "create": [
+          {
+            "name": modelName
+          }
+        ]
+      }
+    }
+  })
+
+  return data.createBrand
+}
+
+export async function addModelToBrand(brandId, modelName) {
+  const data = await keystoneFetch(ADD_MODEL_TO_BRAND, {
+    "data": {
+      "name": modelName,
+      "brand": {
+        "connect": {
+          "id": brandId
+        }
+      }
+    }
+  })
+
+  return data.createModel
 }
 
 // export async function getSingleProduct(id) {

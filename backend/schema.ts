@@ -17,6 +17,7 @@ import { emitMessage } from './socket/features/chat/chat.event'
 
 import { type Lists } from '.keystone/types'
 import { ref } from 'process'
+import { time } from 'console'
 
 export const lists = {
   User: list({
@@ -54,24 +55,10 @@ export const lists = {
       price: decimal({ precision: 12, scale: 3}),
       images: relationship({ ref: 'Image', many: true }),
       dealer: relationship({ ref: 'User.ownedCars' }),
-      slug: text({ isIndexed: 'unique' }),
+      // slug: text({ isIndexed: 'unique'}),
       createdAt: timestamp({
         defaultValue: { kind: 'now' },
       }),
-    },
-    hooks: {
-      resolveInput: async ({ resolvedData, operation }) => {
-        if (operation === 'create' || operation === 'update') {
-          const { brand, model } = resolvedData;
-          if (brand && model) {
-            const base = `${brand}-${model}`.toLowerCase().replace(/\s+/g, '-');
-            const suffix = randomBytes(3).toString('hex')
-            const slug = `${base}-${suffix}`
-           return { ...resolvedData, slug };
-          }
-        }
-        return resolvedData;
-      },
     },
   }),
   Image: list({
