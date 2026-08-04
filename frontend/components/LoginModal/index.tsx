@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { useActionState, useState, useTransition } from "react"
 import { Dialog } from "@/components/Dialog"
-import login from "@/actions/login"
+import { login } from "@/actions/login"
 import { X } from 'lucide-react'
 import styles from './styles.module.css'
 

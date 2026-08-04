@@ -8,7 +8,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
 	const user = await getAuthedUser()
 
 	if (user) {
-		redirect('/')
+		// redirect('/')
 	}
 
 	return children

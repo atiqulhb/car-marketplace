@@ -1,14 +1,14 @@
 export function buildWhere(params) {
-	const { search, brand, model, fuelType, min_mileage, max_mileage, min_price, max_price, year } = params
+	const { q, brand, model, fuelType, min_mileage, max_mileage, min_price, max_price, year } = params
 
 	return {
 		"AND": [
-	      search && {
+	      q && {
 	        "OR": [
 	          {
 	            "brand": {
 	              "name": {
-	                "contains": search,
+	                "contains": q,
 	                "mode": "insensitive"
 	              }
 	            }
@@ -16,7 +16,7 @@ export function buildWhere(params) {
 	         {
 	            "model": {
 	              "name": {
-	                "contains": search,
+	                "contains": q,
 	                "mode": "insensitive"
 	              }
 	            }
@@ -24,7 +24,7 @@ export function buildWhere(params) {
 	         {
 	            "fuelType": {
 	              "name": {
-	                "contains": search,
+	                "contains": q,
 	                "mode": "insensitive"
 	              }
 	            }
@@ -33,17 +33,17 @@ export function buildWhere(params) {
 	        ]
 	       },
 	       brand && {
-	        "brand": {
-	          "id": {
-	            "in": brand.split(',').map(s => s.trim())
-	          }
-	        }
+				"brand": {
+					"name": {
+						"in": brand.split(',').map(s => s.trim())
+					}
+	        	}
 	     	},
 	     	model && {
 	        "model": {
-	          "id": {
-	            "in": model.split(',').map(s => s.trim())
-	          }
+				"name": {
+					"in": model.split(',').map(s => s.trim())
+				}
 	        }
 	     },
 	     fuelType && {

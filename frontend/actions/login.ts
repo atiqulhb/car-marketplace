@@ -2,27 +2,24 @@
 
 import { cookies } from 'next/headers'
 import { keystoneFetch } from '@/lib/keystone'
-import { redirect } from 'next/navigation'
 import { LOGIN_MUTATION } from '@/queries'
 
-
-export default async function login(prevState: any, formData: FormData) {
+export async function login(prevState: any, formData: FormData) {
   if (!formData) {
-    return { success: false, error: 'No form data' }
+    return { user: null, error: 'No form data' }
   }
 
   const email = formData.get('email')
   const password = formData.get('password')
 
   if (!email || !password) {
-    return { success: false, error: 'Missing fields' }
+    return { user: null, error: 'Missing fields' }
   }
 
   try {
     const data = await keystoneFetch(LOGIN_MUTATION, { email, password })
 
-    const { sessionToken, message } = data?.authenticateUserWithPassword
-
+    const { item, sessionToken, message } = data?.authenticateUserWithPassword
 
    if (sessionToken) {
        (await cookies()).set('keystonejs-session', sessionToken, {
@@ -32,16 +29,14 @@ export default async function login(prevState: any, formData: FormData) {
         path: '/',
       })
 
-      // redirect('/')
-
-      return { success: true, error: null }
+      return { user: item, error: null }
    }
 
 
-    return { success: false, error: message ?? 'Login Failed' }
+    return { user: null, error: message ?? 'Login Failed' }
 
   } catch(err) {
 
-    return { success: false, error: err instanceof Error ? err.message : 'Login Failed' }
+    return { user: null, error: err instanceof Error ? err.message : 'Login Failed' }
   }
 }

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { ChevronDown, ChevronUp, X } from 'lucide-react'
 import { queryKeys } from '@/lib/react-query/query-keys'
+import { useBrands } from '@/hooks/useBrands'
 import styles from './styles.module.css'
 
 export default function CustomBrandSelect({ onSelectingBrand }) {
@@ -27,47 +28,49 @@ export default function CustomBrandSelect({ onSelectingBrand }) {
         selectedBrand.id.trim() && onSelectingBrand && onSelectingBrand(selectedBrand.id)
     }, [selectedBrand])
 
-    
-    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery({
-        queryKey: queryKeys.brands,
-        initialPageParam: null,
-        queryFn: async ({ pageParam }) =>  {
-            console.log('page param', pageParam)
-            // if (cursor) {
-            //     searchParams.set('cursor', cursor)
-            // }
-            
-           const res = await fetch('/api/filters/brands?cursor=' + pageParam)
-            if (!res.ok) {
-                throw new Error(`Failed to fetch cars: ${res.statusText}`)
-            }
-            
-            return await res.json()
-        },
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-    })
+    const { brands, sentinelRef } = useBrands()
 
     
+    // const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery({
+    //     queryKey: queryKeys.brands,
+    //     initialPageParam: null,
+    //     queryFn: async ({ pageParam }) =>  {
+    //         console.log('page param', pageParam)
+    //         // if (cursor) {
+    //         //     searchParams.set('cursor', cursor)
+    //         // }
+            
+    //        const res = await fetch('/api/filters/brands?cursor=' + pageParam)
+    //         if (!res.ok) {
+    //             throw new Error(`Failed to fetch cars: ${res.statusText}`)
+    //         }
+            
+    //         return await res.json()
+    //     },
+    //     getNextPageParam: (lastPage) => lastPage.nextCursor,
+    // })
 
-    const brands = data?.pages.flatMap(page => page.items) ?? []
+    
 
-    const sentinelRef = useRef<HTMLDivElement>(null)
+    // const brands = data?.pages.flatMap(page => page.items) ?? []
 
-    useEffect(() => {
-        if (!hasNextPage) return
+    // const sentinelRef = useRef<HTMLDivElement>(null)
 
-        const el = sentinelRef.current
-        if (!el) return
+    // useEffect(() => {
+    //     if (!hasNextPage) return
 
-        const observer = new IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting && !isFetchingNextPage) {
-                fetchNextPage()
-            }
-        })
+    //     const el = sentinelRef.current
+    //     if (!el) return
 
-        observer.observe(el)
-        return () => observer.disconnect()
-    }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+    //     const observer = new IntersectionObserver(([entry]) => {
+    //         if (entry.isIntersecting && !isFetchingNextPage) {
+    //             fetchNextPage()
+    //         }
+    //     })
+
+    //     observer.observe(el)
+    //     return () => observer.disconnect()
+    // }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   return (
     <div className={styles.Wrapper}>

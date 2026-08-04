@@ -3,4 +3,9 @@
     display: flex;
     justify-content: space-between;
     padding: 5px 10vw;
+    & > ul {
+        display: flex;
+        gap: 15px;
+    }
+    
 }

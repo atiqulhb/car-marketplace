@@ -2,7 +2,7 @@ import "server-only"
 
 import { cache } from 'react'
 import { cookies } from 'next/headers'
-import { newBuildWhere } from '@/lib/newbuildWhere'
+import { buildWhere } from '@/lib/buildWhere'
 import { buildOrderBy } from '@/lib/buildOrderBy'
 import { ADD_CAR_MUTATION, GET_CARS_QUERY, GET_CONVERSATIONS_QUERY, GET_MESSAGES_QUERY, SINGLE_CAR_QUERY, GET_ALL_BRANDS, GET_MODELS, ADD_BRAND_WITH_MODEL, ADD_MODEL_TO_BRAND } from '@/queries'
 import { env } from '@/config/env'
@@ -68,7 +68,7 @@ export const getAuthedUser = cache(async () => {
 
 
 export async function fetchCars(filters, cursor) {
-  const where = newBuildWhere(filters)
+  const where = buildWhere(filters)
   const orderBy = buildOrderBy(filters)
   const take = 12
 

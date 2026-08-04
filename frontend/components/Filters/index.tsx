@@ -5,6 +5,7 @@ import { parseAsArrayOf, useQueryStates } from "nuqs"
 import { parseAsInteger, parseAsString, parseAsStringLiteral } from "nuqs/server";
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useState, useEffect, useTransition } from 'react'
+import { useBrands } from "@/hooks/useBrands";
 import styles from './styles.module.css'
 import { ChevronDown, ChevronUp, Search, X } from "lucide-react";
 
@@ -17,7 +18,7 @@ export const carFilterParsers = {
   yearMax:     parseAsInteger,
   priceMin:    parseAsInteger,
   priceMax:    parseAsInteger,
-  search:      parseAsString.withDefault(""),
+  q:      parseAsString.withDefault(""),
   sort:        parseAsStringLiteral(SORT_KEYS).withDefault("newest"),
 };
 
@@ -32,6 +33,8 @@ export default function Filters() {
           shallow: false,
           startTransition
      })
+
+     const { brands, sentinelRef } = useBrands()
 
      function toggleBrand (slug: string) {
           console.log(slug)
@@ -60,12 +63,11 @@ export default function Filters() {
      }
 
 
-     const brands = ["sfsf", "fwer", "etrt", "3453", "34534"]
-
-     function handleSelectingBrand(e) {
-          toggleParam("brand", e.target.textContent)
+     function handleSelectingBrand(brandName) {
+          toggleParam("brand", brandName)
           setBrandDropDown(false)
      }
+     
     return (
      //    <div className={styles.Filters}>
      //       {/* <select onChange={(e) => toggleParam("brand", e.target.value)}>
@@ -140,9 +142,10 @@ export default function Filters() {
                          {brandDropDown && (
                               <div className={styles.DropDown}>
                                    <ul>
-                                        {brands.map((b) => (
-                                             <li value={b} key={b} onClick={handleSelectingBrand}>{b}</li>
+                                        {brands.map(({ id, name }) => (
+                                             <li key={id} onClick={() => handleSelectingBrand(name)}>{name}</li>
                                         ))}
+                                        <li ref={sentinelRef}/>
                                    </ul>
                                              
                               </div>

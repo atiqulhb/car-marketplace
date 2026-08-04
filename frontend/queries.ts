@@ -26,6 +26,7 @@ export const GET_CARS_QUERY = `
           url
         }
       }
+      slug
     }
   }
 `

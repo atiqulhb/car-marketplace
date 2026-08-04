@@ -1,22 +1,26 @@
 'use server'
 
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 import { keystoneFetch } from '@/lib/keystone'
-import login from '@/actions/login'
+import { login } from '@/actions/login'
 
 export async function register(prevState: any, formData: FormData) {
 
   if (!formData) {
-    return { success: false, error: 'No form data' }
+    return { user: null, error: 'No form data' }
   }
 
   const name = formData.get('name') as string
   const email = formData.get('email') as string
   const password = formData.get('password') as string
+  const role = formData.get('role') as string
+  const businessName = formData.get('businessName') as string
+  const address = formData.get('address') as string
+  const area = formData.get('area') as string  
+  const city = formData.get('city') as string
 
   if (!name || !email || !password) {
-    return { success: false, error: 'Missing fields' }
+    return { user: null, error: 'Missing fields' }
   }
 
   const data = await keystoneFetch(
@@ -32,9 +36,26 @@ export async function register(prevState: any, formData: FormData) {
         }
       }
     `,
-    { data: { name, email, password }}
+    {
+      data: {
+        name,
+        email,
+        password,
+        role,
+        ...(role === 'DEALER' && {
+          dealershipInfo: {
+            create: {
+              businessName,
+              address,
+              area,
+              city
+            }
+          }
+        })
+      }
+    }
   )
-
+  console.log(data)
 
   if (data) {
 
@@ -59,7 +80,7 @@ export async function register(prevState: any, formData: FormData) {
       { email, password }
     )
 
-    const { sessionToken, message } = authData?.authenticateUserWithPassword
+    const {item, sessionToken, message } = authData?.authenticateUserWithPassword
 
     if (sessionToken) {
       (await cookies()).set('keystonejs-session', sessionToken, {
@@ -69,11 +90,12 @@ export async function register(prevState: any, formData: FormData) {
         path: '/',
       })
 
-      redirect('/')
+      return { user: item, error: null }
     }
 
     if (message)
 
-      return { success: false, error: message }
+      return { user: null, error: message }
     }
+
 }
