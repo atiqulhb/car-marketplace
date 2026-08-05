@@ -15,7 +15,7 @@ export async function logoutAction() {
 		const cookieStore = await cookies()
 		cookieStore.delete('keystonejs-session')
 
-		revalidatePath('/', 'layout')
+		// revalidatePath('/', 'layout')
 
 		return { success: true, error: null }
 	} catch (err) {

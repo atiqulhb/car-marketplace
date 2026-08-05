@@ -1,6 +1,5 @@
 import { list } from '@keystone-6/core'
 import { allowAll } from '@keystone-6/core/access'
-import { randomBytes } from 'crypto'
 
 import {
   text,
@@ -16,8 +15,6 @@ import {
 import { emitMessage } from './socket/features/chat/chat.event'
 
 import { type Lists } from '.keystone/types'
-import { ref } from 'process'
-import { time } from 'console'
 
 export const lists = {
   User: list({
@@ -33,6 +30,7 @@ export const lists = {
         type: 'enum',
         options: [
           { label: 'User', value: 'USER' },
+          { label: 'Dealer', value: 'DEALER' },
           { label: 'Admin', value: 'ADMIN' },
         ],
         defaultValue: 'USER',
@@ -40,10 +38,21 @@ export const lists = {
       ownedCars: relationship({ ref: 'Car.dealer', many: true }),
       conversations: relationship({ ref: 'Conversation.participants', many: true }),
       wishlist: relationship({ ref: 'WishList.user' }),
+      dealershipInfo: relationship({ ref: 'DealerShipInfo.dealer' }),
       createdAt: timestamp({
         defaultValue: { kind: 'now' },
       }),
     },
+  }),
+  DealerShipInfo: list({
+    access: allowAll,
+    fields: {
+      dealer: relationship({ ref: 'User.dealershipInfo' }),
+      businessName: text(),
+      address: text(),
+      area: text(),
+      city: text()
+    }
   }),
   Car: list({
     access: allowAll,
@@ -52,10 +61,10 @@ export const lists = {
       model: relationship({ ref: 'Model.cars' }),
       year: integer(),
       fuelType: relationship({ ref: 'FuelType.cars' }),
-      price: decimal({ precision: 12, scale: 3}),
+      price: decimal({ precision: 12, scale: 3 }),
       images: relationship({ ref: 'Image', many: true }),
       dealer: relationship({ ref: 'User.ownedCars' }),
-      // slug: text({ isIndexed: 'unique'}),
+      slug: text({ isIndexed: 'unique' }),
       createdAt: timestamp({
         defaultValue: { kind: 'now' },
       }),
@@ -64,7 +73,7 @@ export const lists = {
   Image: list({
     access: allowAll,
     fields: {
-      image: image({ storage: 'local_images'})
+      image: image({ storage: 'local_images' })
     }
   }),
  Brand: list({

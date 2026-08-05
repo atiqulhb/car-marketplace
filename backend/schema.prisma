@@ -12,17 +12,28 @@ generator client {
 }
 
 model User {
-  id                  String         @id @default(cuid())
-  name                String         @default("")
-  email               String         @unique @default("")
+  id                  String          @id @default(cuid())
+  name                String          @default("")
+  email               String          @unique @default("")
   password            String
-  role                UserRoleType?  @default(USER)
-  ownedCars           Car[]          @relation("Car_dealer")
-  conversations       Conversation[] @relation("Conversation_participants")
-  wishlist            WishList?      @relation("User_wishlist", fields: [wishlistId], references: [id])
-  wishlistId          String?        @unique @map("wishlist")
-  createdAt           DateTime?      @default(now())
-  from_Message_sender Message[]      @relation("Message_sender")
+  role                UserRoleType?   @default(USER)
+  ownedCars           Car[]           @relation("Car_dealer")
+  conversations       Conversation[]  @relation("Conversation_participants")
+  wishlist            WishList?       @relation("User_wishlist", fields: [wishlistId], references: [id])
+  wishlistId          String?         @unique @map("wishlist")
+  dealershipInfo      DealerShipInfo? @relation("DealerShipInfo_dealer")
+  createdAt           DateTime?       @default(now())
+  from_Message_sender Message[]       @relation("Message_sender")
+}
+
+model DealerShipInfo {
+  id           String  @id @default(cuid())
+  dealer       User?   @relation("DealerShipInfo_dealer", fields: [dealerId], references: [id])
+  dealerId     String? @unique @map("dealer")
+  businessName String  @default("")
+  address      String  @default("")
+  area         String  @default("")
+  city         String  @default("")
 }
 
 model Car {
@@ -38,6 +49,7 @@ model Car {
   images             Image[]    @relation("Car_images")
   dealer             User?      @relation("Car_dealer", fields: [dealerId], references: [id])
   dealerId           String?    @map("dealer")
+  slug               String     @unique @default("")
   createdAt          DateTime?  @default(now())
   from_WishList_cars WishList[] @relation("WishList_cars")
 
@@ -108,5 +120,6 @@ model WishList {
 
 enum UserRoleType {
   USER
+  DEALER
   ADMIN
 }

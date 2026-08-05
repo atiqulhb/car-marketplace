@@ -21,7 +21,7 @@ export default function Logout() {
 
         queryClient.setQueryData(queryKeys.authedUser, null)
         queryClient.clear()
-        router.refresh()
+        // router.refresh()
         router.push('/')
     }
     

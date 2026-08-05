@@ -12,6 +12,7 @@ type User {
   conversations(where: ConversationWhereInput! = {}, orderBy: [ConversationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ConversationWhereUniqueInput): [Conversation!]
   conversationsCount(where: ConversationWhereInput! = {}): Int
   wishlist: WishList
+  dealershipInfo: DealerShipInfo
   createdAt: DateTime
 }
 
@@ -21,6 +22,7 @@ type PasswordState {
 
 enum UserRoleType {
   USER
+  DEALER
   ADMIN
 }
 
@@ -30,6 +32,7 @@ input UserWhereUniqueInput {
   id: ID
   email: String
   wishlist: WishListWhereUniqueInput
+  dealershipInfo: DealerShipInfoWhereUniqueInput
 }
 
 input UserWhereInput {
@@ -43,6 +46,7 @@ input UserWhereInput {
   ownedCars: CarManyRelationFilter
   conversations: ConversationManyRelationFilter
   wishlist: WishListWhereInput
+  dealershipInfo: DealerShipInfoWhereInput
   createdAt: DateTimeNullableFilter
 }
 
@@ -142,6 +146,7 @@ input UserUpdateInput {
   ownedCars: CarRelateToManyForUpdateInput
   conversations: ConversationRelateToManyForUpdateInput
   wishlist: WishListRelateToOneForUpdateInput
+  dealershipInfo: DealerShipInfoRelateToOneForUpdateInput
   createdAt: DateTime
 }
 
@@ -165,6 +170,12 @@ input WishListRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input DealerShipInfoRelateToOneForUpdateInput {
+  create: DealerShipInfoCreateInput
+  connect: DealerShipInfoWhereUniqueInput
+  disconnect: Boolean
+}
+
 input UserUpdateArgs {
   where: UserWhereUniqueInput!
   data: UserUpdateInput!
@@ -178,6 +189,7 @@ input UserCreateInput {
   ownedCars: CarRelateToManyForCreateInput
   conversations: ConversationRelateToManyForCreateInput
   wishlist: WishListRelateToOneForCreateInput
+  dealershipInfo: DealerShipInfoRelateToOneForCreateInput
   createdAt: DateTime
 }
 
@@ -196,6 +208,77 @@ input WishListRelateToOneForCreateInput {
   connect: WishListWhereUniqueInput
 }
 
+input DealerShipInfoRelateToOneForCreateInput {
+  create: DealerShipInfoCreateInput
+  connect: DealerShipInfoWhereUniqueInput
+}
+
+type DealerShipInfo {
+  id: ID!
+  dealer: User
+  businessName: String
+  address: String
+  area: String
+  city: String
+}
+
+input DealerShipInfoWhereUniqueInput {
+  id: ID
+  dealer: UserWhereUniqueInput
+}
+
+input DealerShipInfoWhereInput {
+  AND: [DealerShipInfoWhereInput!]
+  OR: [DealerShipInfoWhereInput!]
+  NOT: [DealerShipInfoWhereInput!]
+  id: IDFilter
+  dealer: UserWhereInput
+  businessName: StringFilter
+  address: StringFilter
+  area: StringFilter
+  city: StringFilter
+}
+
+input DealerShipInfoOrderByInput {
+  id: OrderDirection
+  businessName: OrderDirection
+  address: OrderDirection
+  area: OrderDirection
+  city: OrderDirection
+}
+
+input DealerShipInfoUpdateInput {
+  dealer: UserRelateToOneForUpdateInput
+  businessName: String
+  address: String
+  area: String
+  city: String
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input DealerShipInfoUpdateArgs {
+  where: DealerShipInfoWhereUniqueInput!
+  data: DealerShipInfoUpdateInput!
+}
+
+input DealerShipInfoCreateInput {
+  dealer: UserRelateToOneForCreateInput
+  businessName: String
+  address: String
+  area: String
+  city: String
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
 type Car {
   id: ID!
   brand: Brand
@@ -206,6 +289,7 @@ type Car {
   images(where: ImageWhereInput! = {}, orderBy: [ImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ImageWhereUniqueInput): [Image!]
   imagesCount(where: ImageWhereInput! = {}): Int
   dealer: User
+  slug: String
   createdAt: DateTime
 }
 
@@ -213,6 +297,7 @@ scalar Decimal
 
 input CarWhereUniqueInput {
   id: ID
+  slug: String
 }
 
 input CarWhereInput {
@@ -227,6 +312,7 @@ input CarWhereInput {
   price: DecimalNullableFilter
   images: ImageManyRelationFilter
   dealer: UserWhereInput
+  slug: StringFilter
   createdAt: DateTimeNullableFilter
 }
 
@@ -262,6 +348,7 @@ input CarOrderByInput {
   id: OrderDirection
   year: OrderDirection
   price: OrderDirection
+  slug: OrderDirection
   createdAt: OrderDirection
 }
 
@@ -273,6 +360,7 @@ input CarUpdateInput {
   price: Decimal
   images: ImageRelateToManyForUpdateInput
   dealer: UserRelateToOneForUpdateInput
+  slug: String
   createdAt: DateTime
 }
 
@@ -301,12 +389,6 @@ input ImageRelateToManyForUpdateInput {
   connect: [ImageWhereUniqueInput!]
 }
 
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
 input CarUpdateArgs {
   where: CarWhereUniqueInput!
   data: CarUpdateInput!
@@ -320,6 +402,7 @@ input CarCreateInput {
   price: Decimal
   images: ImageRelateToManyForCreateInput
   dealer: UserRelateToOneForCreateInput
+  slug: String
   createdAt: DateTime
 }
 
@@ -341,11 +424,6 @@ input FuelTypeRelateToOneForCreateInput {
 input ImageRelateToManyForCreateInput {
   create: [ImageCreateInput!]
   connect: [ImageWhereUniqueInput!]
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 type Image {
@@ -743,6 +821,12 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
+  createDealerShipInfo(data: DealerShipInfoCreateInput!): DealerShipInfo
+  createDealerShipInfos(data: [DealerShipInfoCreateInput!]!): [DealerShipInfo]
+  updateDealerShipInfo(where: DealerShipInfoWhereUniqueInput!, data: DealerShipInfoUpdateInput!): DealerShipInfo
+  updateDealerShipInfos(data: [DealerShipInfoUpdateArgs!]!): [DealerShipInfo]
+  deleteDealerShipInfo(where: DealerShipInfoWhereUniqueInput!): DealerShipInfo
+  deleteDealerShipInfos(where: [DealerShipInfoWhereUniqueInput!]!): [DealerShipInfo]
   createCar(data: CarCreateInput!): Car
   createCars(data: [CarCreateInput!]!): [Car]
   updateCar(where: CarWhereUniqueInput!, data: CarUpdateInput!): Car
@@ -810,6 +894,9 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int
+  dealerShipInfo(where: DealerShipInfoWhereUniqueInput!): DealerShipInfo
+  dealerShipInfos(where: DealerShipInfoWhereInput! = {}, orderBy: [DealerShipInfoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DealerShipInfoWhereUniqueInput): [DealerShipInfo!]
+  dealerShipInfosCount(where: DealerShipInfoWhereInput! = {}): Int
   car(where: CarWhereUniqueInput!): Car
   cars(where: CarWhereInput! = {}, orderBy: [CarOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CarWhereUniqueInput): [Car!]
   carsCount(where: CarWhereInput! = {}): Int

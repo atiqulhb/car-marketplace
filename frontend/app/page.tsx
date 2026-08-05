@@ -5,6 +5,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import Filters from "@/components/Filters";
 import CarsDisplay from "@/components/CarsDisplay";
 
+
 export default async function Home({ searchParams }) {
   const params = await searchParams;
 
