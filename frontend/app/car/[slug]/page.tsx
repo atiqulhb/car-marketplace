@@ -9,6 +9,10 @@ export default async function CarPage({ params }) {
 
    const car = await getCarInformations(slug)
    console.log(car)
+
+   function handleSendingMessageToDealer() {
+    
+   }
    
   return (
     <div>
@@ -36,7 +40,7 @@ export default async function CarPage({ params }) {
           </div>
             <div className={styles.DealerButtons}>
               <button>Visit Store</button>
-              <button>Send Message</button>
+              <button onClick={handleSendingMessageToDealer}>Send Message</button>
             </div>
         </div>
       </div>

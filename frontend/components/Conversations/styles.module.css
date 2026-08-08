@@ -1,17 +1,10 @@
-.ChatBox {
-    width: 100%;
-    height: 100dvh;
-    display: flex;
-}
-
 .ConversationsBox {
-    width: 300px;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    
     border: 1px solid black;
-    & > span {
+    & > li {
         text-align: center;
         border-bottom:  1px solid rgba(0,0,0,0.33);
         padding: 10px;
@@ -20,23 +13,4 @@
             border-bottom: none;
         } */
     }
-}
-
-.MessageBoxWrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.MessagesBox {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid black;
-    overflow-y: scroll;
-}
-
-.SendBox {
-    height: 50px;
-    display: flex;
-    border: 1px solid black;
 }

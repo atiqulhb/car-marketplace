@@ -32,11 +32,10 @@ export const GET_CARS_QUERY = `
 `
 
 export const GET_CONVERSATIONS_QUERY = `
-    query Conversations($where: ConversationWhereInput!) {
+    query Conversations($where: ConversationWhereInput!, $participantsWhere: UserWhereInput!) {
       conversations(where: $where) {
         id
-        participants {
-          id
+        participants(where: $participantsWhere) {
           name
         }
       }
@@ -152,6 +151,17 @@ export const ADD_MODEL_TO_BRAND = `
   mutation CreateModel($data: ModelCreateInput!) {
     createModel(data: $data) {
       id
+    }
+  }
+`
+
+export const GET_CONVERSATIONS = `
+  query Conversations($where: ConversationWhereInput!, $participantsWhere2: UserWhereInput!) {
+    conversations(where: $where) {
+      id
+      participants(where: $participantsWhere2) {
+        name
+      }
     }
   }
 `

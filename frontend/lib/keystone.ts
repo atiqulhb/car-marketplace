@@ -15,7 +15,7 @@ export async function getSessionHeader() {
 export async function keystoneFetch(query: string, variables?: Record<string, unknown>) {
   const sessionHeader = await getSessionHeader()
   
-  const res = await fetch(env.BACKEND_URL!, {
+  const res = await fetch(process.env.BACKEND_URL!, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -126,6 +126,13 @@ export async function getConversations() {
           "id": {
             "equals": user.id
           }
+        }
+      }
+    },
+    "participantsWhere": {
+      "id": {
+        "not": {
+          "equals": user.id
         }
       }
     }
@@ -249,80 +256,3 @@ export async function addModelToBrand(brandId, modelName) {
 
   return data.createModel
 }
-
-// export async function getSingleProduct(id) {
-//   const res = await fetch('http://localhost:3000/api/graphql', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({
-//       query: `
-//         query Product($where: ProductWhereUniqueInput!) {
-//           product(where: $where) {
-//             id
-//             title
-//             brand {
-//               name
-//             }
-//             categories {
-//               name
-//             }
-//             price
-//             images {
-//               id
-//               source {
-//                 id
-//                 url
-//               }
-//             }
-//             shortDescription
-//             fullDescription
-//             rating
-//             slug
-//             createdAt
-//           }
-//         }
-//       `,
-//       variables: { where: { id }}
-//     }),
-//     next: {
-//       revalidate: 30,
-//       tags: [`products-${id}`]
-//     }
-//   })
-
-//   const { data, error } = await res.json()
-
-//     if (error) {
-//     console.error("Graphql Errors", error);
-//     throw new Error("Failed to fetch single product")
-//   }
-
-//   return data.product
-// }
-
-// export async function getPriceRange() {
-//   const res = await fetch('http://localhost:3000/api/graphql', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({
-//       query: `
-//         query PriceRange {
-//           priceRange {
-//             min
-//             max
-//           }
-//         }
-//       `,
-//     }),
-//     next: { revalidate: 60 }
-//   })
-
-//   const { data, error } = await res.json()
-
-//   if (error) {
-//     console.error("Graphql Errors", error);
-//     throw new Error("Failed to fetch price range")
-//   }
-    
-//   return data.priceRange
-// }

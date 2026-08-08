@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { getConversations } from '@/lib/keystone'
 
 export async function GET(request: NextRequest) {
-    console.log('inside api/conversations')
     try {
         const conversations = await getConversations()
         console.log('conversations list from api/conversations', conversations)

@@ -1,0 +1,19 @@
+.MessageBoxWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.MessagesBox {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid black;
+    min-height: 0;
+}
+
+.SendBox {
+    height: 50px;
+    display: flex;
+    border: 1px solid black;
+}

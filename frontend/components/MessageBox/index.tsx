@@ -1,3 +1,5 @@
+'use client'
+
 import { useChatSocket } from "@/hooks/socket/useChatSocket"
 import { useMessages } from "../../hooks/useMessages"
 import styles from './styles.module.css'
@@ -12,7 +14,7 @@ export default function MessageBox({ conversationId }) {
         <div className={styles.Box}>
             <div className={styles.Messages}>
                 {messages?.data?.map(({ id, content, sender }) => (
-                <span key={id} style={ sender.id === user.id ? { alignSelf: 'flex-end' } : { alignSelf: 'flex-start' }}>{content}</span>
+                <span key={id} style={{ alignSelf: `${sender.id === user.id ? 'flex-end' : 'flex-start'}` }}>{content}</span>
             ))}
             </div>   
         </div>
