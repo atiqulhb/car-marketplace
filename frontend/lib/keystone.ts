@@ -163,21 +163,21 @@ export const getWishlist = cache(async () => {
   try {
     const data = await keystoneFetch(`
       query WishList($where: WishListWhereUniqueInput!) {
-  wishList(where: $where) {
-    id
-    cars {
-      id
+      wishList(where: $where) {
+        id
+        cars {
+          id
+        }
+      }
     }
-  }
-}
-    `,
-  {
-  "where": {
-    "user": {
-      "id": user.id
-    }
-  }
-})
+        `,
+      {
+      "where": {
+        "user": {
+          "id": user.id
+        }
+      }
+    })
 
     return data.wishList?.cars?.map(({ id }) => id)
   } catch (error) {
@@ -207,21 +207,18 @@ export async function getAllBrands(cursor) {
   return { items, nextCursor: hasMore ? items[items.length -1].id : null }
 }
 
-export async function getModels(brandId: string) {
+export async function getModels(brand: string[]) {
   const data = await keystoneFetch(GET_MODELS, {
     "where": {
-      "brand": {
-        "id": {
-          "in": [brandId]
+      ...(brand.length > 0 && { "brand": {
+        "name": {
+          "in": brand
         }
-      }
+      }})
     },
-    "orderBy": [
-      {
-        "name": 'asc'
-      }
-    ]
+    "orderBy": [{ "name": 'asc' }]
   })
+
   return data.models
 }
 

@@ -5,5 +5,5 @@ export const queryKeys = {
   messages: (conversationId: string) => ["messages", conversationId] as const,
   wishlist: (userId: string) => ["wl-cars-ids", userId],
   brands: ["brands"] as const,
-  models: (brandId: string) => ["models", brandId] as const
+  models: (sortedBrand: string[]) => ["models", ...sortedBrand] as const
 }

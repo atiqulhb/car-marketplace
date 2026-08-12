@@ -3,14 +3,14 @@
 import { queryKeys } from "@/lib/react-query/query-keys"
 import { useQuery } from "@tanstack/react-query"
 
-export function useModels(brandId: string) {
-    const { data } = useQuery({
-        queryKey: queryKeys.models(brandId),
+export function useModels(brand: string[]) {
+    console.log("brand array from useModels hook", brand)
+    const { data: models } = useQuery({
+        queryKey: queryKeys.models([...brand].sort()),
         queryFn: async () => {
-            const res = await fetch(`/api/filters/models?brandId=${brandId}`)
+            const res = await fetch(`/api/filters/models?brand=${brand.toString()}`)
             return res.json()
-        },
-        enabled: !!brandId, // Only run the query if conversationId is not null
+        }
     })
-    return { data }
+    return { models }
 }
